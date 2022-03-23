@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<link rel="stylesheet" href="style.css">
+<head></title>
+<meta charset="UTF-8">
+<body>
+
+
+<div class = "game">
+    <div class = "left" id = "left_image" style="background-image: url('images/full_metal.jpeg');background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;">
+        <p class = "high_score" >High Score: 0</p>
+    </div>
+
+
+    <div class = "right" style="background-image: url('images/gintama.jpg');background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;">
+    <button onclick="myFunction()">Higher</button>
+        <p class = "current_score" >Score: 0</p>
+    </div>
+</div>
+
+
+<script>
+    function myFunction() {
+       document.getElementById("left_image").style.backgroundImage = "url(images/steins_gate.jpg)";
+    }
+</script>
+
+</body>
+
+</html>
