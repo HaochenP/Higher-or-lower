@@ -11,11 +11,11 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 <meta charset="UTF-8">
-<body>
+<body onload="test()">
 
 
 <div class = "game"> 
-    <div class = "left" id = "left_image" style="background-image: url('images/full_metal.jpeg');background-size: cover;
+    <div class = "left" id = "left_image" style="background-image: url('images/_full_metal.jpeg');background-size: cover;
     background-repeat: no-repeat;
     background-position: center;">
         <p class = "high_score" id = "anim-body ">High Score: 0</p>
@@ -23,7 +23,7 @@
     </div>
 
 
-    <div class = "right" style="background-image: url('images/gintama.jpg');background-size: cover;
+    <div class = "right" style="background-image: url('images/_gintama.jpg');background-size: cover;
     background-repeat: no-repeat;
     background-position: center;">
     <button onclick="myFunction()" id = animateBtn1 >Higher</button>
@@ -34,8 +34,16 @@
 
 
 <script>
+    
+    function test(){
+    const anime_titles = ["demon_slayer", "gintama"]
+    alert(anime_titles[0])
+    $('#left_image').addClass('animate__animated '+animation);
+    const note = document.querySelector('.left');
+    note.style.backgroundImage:
+    };
     function myFunction() {
-       document.getElementById("left_image").style.backgroundImage = "url(images/steins_gate.jpg)";
+       document.getElementById("left_image").style.backgroundImage = "url(_images/steins_gate.jpg)";
     };
 
     $(function(){
