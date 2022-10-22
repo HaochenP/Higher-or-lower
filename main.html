@@ -15,21 +15,22 @@
 
 
 <div class = "game"> 
-    <div class = "left" id = "left_image" style="background-image: url('images/full_metal.jpeg');background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;">
-        <p class = "high_score" id = "anim-body ">High Score: 0</p>
-        <p id="anim-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo, repellat minima suscipit sapiente dolore inventore debitis maxime distinctio eaque dolores culpa aut ab, ipsum delectus adipisci dolorum perferendis iure et maiores sint obcaecati laboriosam ut nobis. Deleniti suscipit, ea non.</p>
+
+      <div class = "split left_image" id = "left_image" style="background-image: url('images/full_metal.jpeg');background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;">
+          <p class = "high_score" id = "anim-body ">High Score: 0</p>
     </div>
 
 
-    <div class = "right" style="background-image: url('images/gintama.jpg');background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;">
-    <button onclick="myFunction()" id = animateBtn1 >Higher</button>
-    <button id="animateBtn" class="btn btn-primary">Animate</button>
-        <p class = "current_score" id = "anim-head">Score: 0</p>
-    </div>
+      <div class = "split right_image" id = "right_image" style="background-image: url('images/gintama.jpg');background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;">
+      <button onclick="slideImage()" id = animateBtn1 >Higher</button>
+      <button id="animateBtn" class="btn btn-primary">Animate</button>
+          <p class = "current_score" id = "anim-head">Score: 0</p>
+
+  </div>
 </div>
 
 
@@ -41,7 +42,7 @@
     $(function(){
       $('#animateBtn').click(function(){
         animate('#left_image', 'animate__fadeOutLeft');
-        animate('#anim-body', 'animate__rubberBand');
+        slideImage();
         return false;
       });
 
@@ -61,6 +62,25 @@
         }, 1000);
       }
     })
+    function slideImage() {
+      let id = null;
+      const elem = document.getElementById("right_image");  
+      let pos = 0;
+      clearInterval(id);
+      id = setInterval(frame, 0.5);
+      
+      function frame() {
+        if (pos == 960) {
+          clearInterval(id);
+        } else {
+          
+          pos += 6; 
+          elem.style.right = pos + "px"; 
+        }
+      }
+
+    }
+
 </script>
 
 
