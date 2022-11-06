@@ -11,6 +11,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <body">
 
 
@@ -24,7 +25,7 @@
           <p class = "term-ranking__ranking" id = "rank">rank</p>
           <button class = "higher button btn btn-primary" onclick="answer('Higher','left_image')" id = animateBtn1 style = "display:none;">Higher</button>
           <button class = "lower button btn btn-primary" onclick="answer('Lower','left_image')" id="animateBtn" style = "display:none;">Lower</button>
-          <p class = "high_score" id = "anim-body ">High Score: 0</p>
+          <p class = "high_score" id = "highScore">High Score: 0</p>
 
     </div>
 
@@ -38,7 +39,7 @@
       <p class = "term-ranking__ranking"  id = "rank">rank</p>
       <button class = "higher button btn btn-primary" onclick="answer('Higher','right_image')" id = animateBtn1 >Higher</button>
       <button class = "lower button btn btn-primary" onclick="answer('Lower','right_image')" id="animateBtn" >Lower</button>
-      <p class = "high_score" id = "anim-body ">High Score: 0</p>
+      <p class = "high_score" id = "highScore" style  = "display: none;">High Score: 0</p>
           <p class = "current_score" id = "score">Score: 0</p>
 
   </div>
@@ -46,10 +47,19 @@
 
 
 <script>
-
-
+      
+      
       window.onload = function(){
         document.querySelector(`#right_image`).querySelector('#rank').style.display = 'none';
+        if (localStorage.getItem("highScore") === null) {
+          localStorage.setItem('highScore', 0);
+          highScore = 0;
+        }
+        else
+        {
+          highScore = localStorage.getItem('highScore');
+        }
+        document.querySelector(`#left_image`).querySelector(`#highScore`).innerHTML = 'High Score: ' + (highScore);
         userAction();
       };
 
@@ -149,6 +159,12 @@
         if (rightRank < leftRank)
         {
           count++;
+          if (count > highScore)
+          {
+            localStorage.setItem("highScore", count);
+            highScore = count;
+            document.querySelector(`#${container}`).querySelector(`#highScore`).innerHTML = 'High Score: ' + (count);
+          }
           console.log("you are right");
           console.log(rightRank,leftRank);
           document.getElementById("score").innerHTML = 'Score: ' + (count);
@@ -166,6 +182,12 @@
         if (rightRank > leftRank)
         {
           count++;
+          if (count > highScore)
+          {
+            localStorage.setItem("highScore", count);
+            highScore = count;
+            document.querySelector(`#${container}`).querySelector(`#highScore`).innerHTML = 'High Score: ' + (count);
+          }
           console.log("you are right");
           console.log(rightRank,leftRank);
           document.getElementById("score").innerHTML = 'Score: ' + (count);
@@ -219,6 +241,12 @@
       .querySelector('#animateBtn');
       upButton.style.display = "none";
       downButton.style.display = "none";
+      document.querySelector(`#${container}`).querySelector(`#highScore`).innerHTML = 'High Score: ' + (highScore)
+      document
+      .querySelector(`#${container}`)
+      
+      .querySelector('#highScore').style.display = "block";
+      
       if (elem.style.left == "auto"){
         clearInterval(id);
         var pos = parseInt(elem.style.right)+0;
@@ -233,18 +261,18 @@
       }
 
       function frameRight() {
-        if (pos == screen.width/2) {
+        if (pos >= screen.width/2) {
           clearInterval(id);
         } else {
-          pos += 6; 
+          pos += screen.width/300; 
           elem.style.right = pos + "px"; 
         }
       }
       function frameLeft() {
-        if (pos == 0) {
+        if (pos <= 0) {
           clearInterval(id);
         } else {
-          pos -= 6; 
+          pos -= screen.width/300; 
           elem.style.left = pos + "px"; 
           console.log(pos)
         }
@@ -277,14 +305,16 @@
       document
       .querySelector(`#${container}`)
       .querySelector('#name').innerHTML = `${rightName}`;;
-
+      document
+      .querySelector(`#${container}`)
+      .querySelector('#highScore').style.display = "none";
       var rank = document.querySelector(`#${container}`).querySelector('#rank');
       rank.style.display = 'none';
 
       
       imgContainer.style.backgroundImage = `url(${right_img})`;
-      upButton.style.display = "initial";
-      downButton.style.display = "initial";
+      upButton.style.display = "block";
+      downButton.style.display = "block";
       console.log(document.getElementById(container).style.right );
       console.log(leftName,rightName);
     }
