@@ -1,3 +1,65 @@
+.term-ranking__ranking {
+    font-size: 33px;
+    font-weight: bold;
+    color:crimson;
+    opacity: 1;
+    text-align: center;
+    line-height: 0.75;
+    margin-bottom: 10px; }
+    @media screen and (orientation: landscape) {
+      .term-ranking__ranking {
+        font-size: 9vh; } }
+    @media screen and (min-width: 28.75em) {
+      .term-ranking__ranking{
+        font-size: 30px; } }
+    @media screen and (min-width: 28.75em) and (orientation: landscape) {
+      .term-ranking__ranking{
+        font-size: 8vh; } }
+    @media screen and (min-width: 41.25em) {
+      .term-ranking__ranking {
+        font-size: 34px;
+        line-height: 1; } }
+    @media screen and (min-width: 41.25em) and (orientation: landscape) {
+      .term-ranking__ranking {
+        font-size: 8.5vh; } }
+  
+
+
+
+.term-keyword {
+    margin-bottom: 10px; }
+    .term-keyword__keyword {
+        padding-top:20%;
+      text-align: center;
+      font-size: 26px;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color:cornflowerblue;
+      text-transform: capitalize; }
+      @media screen and (orientation: landscape) {
+        .term-keyword__keyword {
+          font-size: 8vh; } }
+      @media screen and (min-width: 28.75em) {
+        .term-keyword__keyword {
+          font-size: 30px; } }
+      @media screen and (min-width: 28.75em) and (orientation: landscape) {
+        .term-keyword__keyword {
+          font-size: 7vh; } }
+      @media screen and (min-width: 41.25em) {
+        .term-keyword__keyword {
+          font-size: 34px; } }
+      @media screen and (min-width: 41.25em) and (orientation: landscape) {
+        .term-keyword__keyword {
+          font-size: 6vh; } }
+  
+.has{
+    text-align: center;
+    color:cornflowerblue;
+    font-size: 26px;
+}
+.ranking{
+    text-align: center;
+}
 
 .game {
     position:absolute;
@@ -59,4 +121,14 @@
     animation-delay: 1s;
     animation-duration: 1s;
     animation-iteration-count: 1;
+}
+
+.higher{
+    margin-right: 100%;
+    margin-bottom: 20px;
+}
+
+.button{
+    position: relative;
+    left: 45%;
 }
