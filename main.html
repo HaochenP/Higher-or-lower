@@ -19,9 +19,11 @@
       <div class = "split left_image" id = "left_image" style="background-size: cover;
       background-repeat: no-repeat;
       background-position: center;">
-          <p class = "term-keyword__keyword" id = "leftName">Name of the anime</p>
+          <p class = "term-keyword__keyword" id = "name">Name of the anime</p>
           <p class = "has" id = "anim-body ">is positioned at rank</p>
-          <p class = "term-ranking__ranking" id = "leftRank">rank</p>
+          <p class = "term-ranking__ranking" id = "rank">rank</p>
+          <button class = "higher button btn btn-primary" onclick="answer('Higher','left_image')" id = animateBtn1 style = "display:none;">Higher</button>
+          <button class = "lower button btn btn-primary" onclick="answer('Lower','left_image')" id="animateBtn" style = "display:none;">Lower</button>
           <p class = "high_score" id = "anim-body ">High Score: 0</p>
 
     </div>
@@ -31,12 +33,13 @@
       background-repeat: no-repeat;
       background-position: center;">
       
-      <p class = "term-keyword__keyword" id = "rightName">Name of the anime</p>
+      <p class = "term-keyword__keyword" id = "name">Name of the anime</p>
       <p class = "has" id = "anim-body ">is positioned at rank</p>
-      <button class = "higher button" onclick="slideImage()" id = animateBtn1 >Higher</button>
-      <button class = "lower button" id="animateBtn" class="btn btn-primary">Lower</button>
+      <p class = "term-ranking__ranking"  id = "rank">rank</p>
+      <button class = "higher button btn btn-primary" onclick="answer('Higher','right_image')" id = animateBtn1 >Higher</button>
+      <button class = "lower button btn btn-primary" onclick="answer('Lower','right_image')" id="animateBtn" >Lower</button>
       <p class = "high_score" id = "anim-body ">High Score: 0</p>
-          <p class = "current_score" id = "anim-head">Score: 0</p>
+          <p class = "current_score" id = "score">Score: 0</p>
 
   </div>
 </div>
@@ -44,13 +47,14 @@
 
 <script>
       window.onload = function(){
+        document.querySelector(`#right_image`).querySelector('#rank').style.display = 'none';
         userAction();
       };
       const userAction = async () => {
-      const numberOfAnimes = 4
+      numberOfAnimes = 20 ;
       const listArray = [...Array(5).keys()];
-      console.log(listArray);
-      const response = await fetch('https://cors-anywhere.herokuapp.com/api.myanimelist.net/v2/anime/ranking?ranking_type=all&limit=4', {
+
+      const response = await fetch(`https://cors-anywhere.herokuapp.com/api.myanimelist.net/v2/anime/ranking?ranking_type=all&limit=${numberOfAnimes}`, {
         method:'get',
         headers: {
             'X-MAL-CLIENT-ID': '3943b48f057b523f7826f85fa3e6401d',
@@ -58,9 +62,9 @@
         }) ;
       
       const myJson = await response.text(); //extract JSON from the http response
-      console.log(myJson);
-      const array = JSON.parse(myJson);
-      console.log(array);
+
+      array = JSON.parse(myJson);
+
       firstAnime = Math.floor(Math.random() * numberOfAnimes);
       secondAnime = Math.floor(Math.random() * numberOfAnimes);
       left_anime = array["data"][firstAnime];
@@ -68,8 +72,7 @@
       
       left_img = left_anime['node']['main_picture']['large']
       right_img =  right_anime['node']['main_picture']['large']
-      console.log(left_img,right_img);
-      console.log(left_anime['node']['title']);
+  
       leftName = left_anime['node']['title'];
       leftRank = left_anime['ranking']['rank'];
 
@@ -78,11 +81,11 @@
       rightRank = right_anime['ranking']['rank'];
 
 
+      document.querySelector(`#left_image`).querySelector('#name').innerHTML = `${leftName}`;
+      document.querySelector(`#left_image`).querySelector('#rank').innerHTML = `${leftRank}`;
 
-      document.getElementById("leftName").innerHTML = `${leftName}`;
-      document.getElementById("leftRank").innerHTML = `${leftRank}`;
+      document.querySelector(`#right_image`).querySelector('#name').innerHTML = `${rightName}`;
 
-      document.getElementById("rightName").innerHTML = `${rightName}`;
 
       document.getElementById("left_image").style.backgroundImage = `url(${left_img})`;
       document.getElementById("right_image").style.backgroundImage = `url(${right_img})`;
@@ -94,46 +97,141 @@
 
     
 
-    $(function(){
-      $('#animateBtn').click(function(){
-        animate('#left_image', 'animate__fadeOutLeft');
-        slideImage();
-        return false;
-      });
+  
 
-      $('#animateBtn2').click(function(){
-        animate('header', 'slideOutUp');
-        setTimeout(function(){
-          $('header').css('visibility','hidden');
-        }, 1000);
-        return false;
-      });
-
-      // Animate
-      function animate(element, animation){
+    function animate(element, animation){
         $(element).addClass('animate__animated '+animation);
         var wait = setTimeout(function(){
           $(element).removeClass('animate__animated '+animation);
         }, 1000);
       }
-    })
-    function slideImage() {
+
+    function slide(container){
+      if (container == 'right_image'){
+        animate('#left_image', 'animate__fadeOutLeft');
+        slideImage('right_image');
+        document.getElementById("right_image").style.zIndex = '1';
+        document.getElementById("left_image").style.zIndex = '0';
+        reverseSlide('left_image');
+        return false;
+      }
+      else if (container == 'left_image'){
+        animate('#right_image', 'animate__fadeOutLeft');
+        slideImage('left_image');
+        document.getElementById("left_image").style.zIndex = '1';
+        document.getElementById("right_image").style.zIndex = '0';
+        reverseSlide('right_image');
+        return false;
+      }
+      }
+    
+
+
+
+    var count = 0;
+
+    function answer(value, container){
+      var rank = document.querySelector(`#${container}`).querySelector('#rank');
+      rank.innerHTML = `${rightRank}`;
+      rank.style.display = 'block';
+      if (value === "Higher"){
+        if (rightRank < leftRank)
+        {
+          count++;
+          console.log("you are right");
+          console.log(rightRank,leftRank);
+          document.getElementById("score").innerHTML = 'Score: ' + (count);
+          changeAnime();
+          slide(container);
+        }
+        else {
+          console.log("you are wrong");
+          console.log(rightRank,leftRank);
+        }
+      }
+      else
+      {
+        if (rightRank > leftRank)
+        {
+          count++;
+          console.log("you are right");
+          console.log(rightRank,leftRank);
+          document.getElementById("score").innerHTML = 'Score: ' + (count);
+          changeAnime();
+          slide(container);
+        }
+        else {
+          console.log("you are wrong");
+          console.log(rightRank,leftRank);
+        }
+      }
+    }
+    
+    function changeAnime(){
+      leftName = rightName;
+      leftRank = rightRank;
+      secondAnime = Math.floor(Math.random() * numberOfAnimes);
+      right_anime = array["data"][secondAnime];
+      
+      right_img =  right_anime['node']['main_picture']['large']
+  
+      rightName = right_anime['node']['title'];
+      rightRank = right_anime['ranking']['rank'];
+      console.log(leftName,rightName);
+    }
+
+    function slideImage(container) {
       let id = null;
-      const elem = document.getElementById("right_image");  
+      const elem = document.getElementById(container);  
       let pos = 0;
+      const upButton = document
+      .querySelector(`#${container}`)
+      .querySelector('#animateBtn1');
+
+      const downButton = document
+      .querySelector(`#${container}`)
+      .querySelector('#animateBtn');
+      upButton.style.display = "none";
+      downButton.style.display = "none";
       clearInterval(id);
       id = setInterval(frame, 0.5);
-      
       function frame() {
         if (pos == screen.width/2) {
           clearInterval(id);
         } else {
-          
           pos += 6; 
           elem.style.right = pos + "px"; 
         }
       }
+      console.log(elem.getAttribute('style'), elem.style.left);
+    }
+    function reverseSlide(container)
+    {
+      document.getElementById(container).style.left = screen.width/2 + "px";
 
+      const imgContainer = document.querySelector(`#${container}`)
+
+      const upButton = document
+      .querySelector(`#${container}`)
+      .querySelector('#animateBtn1');
+
+      const downButton = document
+      .querySelector(`#${container}`)
+      .querySelector('#animateBtn');
+
+      document
+      .querySelector(`#${container}`)
+      .querySelector('#name').innerHTML = `${rightName}`;;
+
+      var rank = document.querySelector(`#${container}`).querySelector('#rank');
+      rank.style.display = 'none';
+
+      
+      imgContainer.style.backgroundImage = `url(${right_img})`;
+      upButton.style.display = "initial";
+      downButton.style.display = "initial";
+      console.log(document.getElementById(container).style.right );
+      console.log(leftName,rightName);
     }
 
 </script>
