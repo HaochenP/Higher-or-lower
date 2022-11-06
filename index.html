@@ -14,11 +14,11 @@
 <body">
 
 
-<div class = "game"> 
-
+<div class = "game" > 
+      <button class = "higher button btn btn-primary" onclick="start()" id = startButton >Start Game</button>
       <div class = "split left_image" id = "left_image" style="background-size: cover;
       background-repeat: no-repeat;
-      background-position: center;">
+      background-position: center; left:0px; right:auto; display:none;">
           <p class = "term-keyword__keyword" id = "name">Name of the anime</p>
           <p class = "has" id = "anim-body ">is positioned at rank</p>
           <p class = "term-ranking__ranking" id = "rank">rank</p>
@@ -31,7 +31,7 @@
 
       <div class = "split right_image" id = "right_image" style="background-size: cover;
       background-repeat: no-repeat;
-      background-position: center;">
+      background-position: center; right:0px; left:auto; display:none;">
       
       <p class = "term-keyword__keyword" id = "name">Name of the anime</p>
       <p class = "has" id = "anim-body ">is positioned at rank</p>
@@ -46,12 +46,15 @@
 
 
 <script>
+
+
       window.onload = function(){
         document.querySelector(`#right_image`).querySelector('#rank').style.display = 'none';
         userAction();
       };
+
       const userAction = async () => {
-      numberOfAnimes = 20 ;
+      numberOfAnimes = 100;
       const listArray = [...Array(5).keys()];
 
       const response = await fetch(`https://cors-anywhere.herokuapp.com/api.myanimelist.net/v2/anime/ranking?ranking_type=all&limit=${numberOfAnimes}`, {
@@ -67,6 +70,10 @@
 
       firstAnime = Math.floor(Math.random() * numberOfAnimes);
       secondAnime = Math.floor(Math.random() * numberOfAnimes);
+      while (firstAnime == secondAnime)
+      {
+        secondAnime = Math.floor(Math.random() * numberOfAnimes);
+      }
       left_anime = array["data"][firstAnime];
       right_anime = array["data"][secondAnime];
       
@@ -96,7 +103,11 @@
     };
 
     
-
+    function start(){
+      document.getElementById("startButton").style.display = 'none';
+      document.getElementById("left_image").style.display = 'block';
+      document.getElementById("right_image").style.display = 'block';
+    }
   
 
     function animate(element, animation){
@@ -147,6 +158,7 @@
         else {
           console.log("you are wrong");
           console.log(rightRank,leftRank);
+          endGame();
         }
       }
       else
@@ -163,15 +175,30 @@
         else {
           console.log("you are wrong");
           console.log(rightRank,leftRank);
+          endGame();
         }
       }
     }
     
+    function endGame(){
+      document.getElementById("left_image").style.display = 'none';
+      document.getElementById("right_image").style.display = 'none';
+      alert("you lost");
+      document.getElementById("startButton").style.display = 'block';
+      location.reload();
+    }
+
     function changeAnime(){
       leftName = rightName;
       leftRank = rightRank;
       secondAnime = Math.floor(Math.random() * numberOfAnimes);
       right_anime = array["data"][secondAnime];
+      while (right_anime['node']['title'] == leftName)
+      {
+        secondAnime = Math.floor(Math.random() * numberOfAnimes);
+        right_anime = array["data"][secondAnime];
+      }
+      
       
       right_img =  right_anime['node']['main_picture']['large']
   
@@ -183,7 +210,6 @@
     function slideImage(container) {
       let id = null;
       const elem = document.getElementById(container);  
-      let pos = 0;
       const upButton = document
       .querySelector(`#${container}`)
       .querySelector('#animateBtn1');
@@ -193,9 +219,20 @@
       .querySelector('#animateBtn');
       upButton.style.display = "none";
       downButton.style.display = "none";
-      clearInterval(id);
-      id = setInterval(frame, 0.5);
-      function frame() {
+      if (elem.style.left == "auto"){
+        clearInterval(id);
+        var pos = parseInt(elem.style.right)+0;
+        id = setInterval(frameRight, 0.5);
+      }
+      else
+      {
+        clearInterval(id);
+        var pos = parseInt(elem.style.left)+0;
+        id = setInterval(frameLeft, 0.5);
+        
+      }
+
+      function frameRight() {
         if (pos == screen.width/2) {
           clearInterval(id);
         } else {
@@ -203,11 +240,29 @@
           elem.style.right = pos + "px"; 
         }
       }
+      function frameLeft() {
+        if (pos == 0) {
+          clearInterval(id);
+        } else {
+          pos -= 6; 
+          elem.style.left = pos + "px"; 
+          console.log(pos)
+        }
+      }
+
       console.log(elem.getAttribute('style'), elem.style.left);
     }
+
     function reverseSlide(container)
     {
-      document.getElementById(container).style.left = screen.width/2 + "px";
+      const elem = document.getElementById(container);
+      if (elem.style.left === "auto"){
+        document.getElementById(container).style.right = 0;
+      }
+      else{
+        document.getElementById(container).style.left = screen.width/2 + "px";
+      }
+      
 
       const imgContainer = document.querySelector(`#${container}`)
 

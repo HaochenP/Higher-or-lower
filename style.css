@@ -86,16 +86,13 @@
 
 .left_image{
     left: 0;
-    background-color: #111;
     z-index: 0;
     position:absolute;
 }
 
 
 .right_image{
-
     right: 0px;
-    background-color: red;
     z-index: 1;
     position:absolute;
 }
